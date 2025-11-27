@@ -7,7 +7,7 @@ export const messagesService = {
     limit: number = 50,
     beforeMessageId?: string
   ): Promise<Message[]> {
-    let url = `/messages/${conversationId}?limit=${limit}`;
+    let url = `/conversations/${conversationId}/messages?limit=${limit}`;
     if (beforeMessageId) {
       url += `&beforeMessageId=${beforeMessageId}`;
     }
@@ -21,7 +21,7 @@ export const messagesService = {
     encryptedSessionKey: string,
     expirySeconds?: number
   ): Promise<Message> {
-    const response = await apiClient.post(`/messages/${conversationId}`, {
+    const response = await apiClient.post(`/conversations/${conversationId}/messages`, {
       ciphertextMessage,
       encryptedSessionKey,
       expirySeconds,
