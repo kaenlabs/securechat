@@ -82,7 +82,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const encryptedPrivateKey = await AsyncStorage.getItem(PRIVATE_KEY_STORAGE_KEY);
       
       if (!encryptedPrivateKey) {
-        throw new Error('Private key not found. Please register again.');
+        // No keys found - this account was registered before key generation
+        // Generate new keypair and update backend
+        const keyPair = generateKeyPair();
+        const encryptedPrivKey = encryptPrivateKey(keyPair.privateKey, password);
+        
+        // Store keys
+        await AsyncStorage.setItem(PRIVATE_KEY_STORAGE_KEY, encryptedPrivKey);
+        await AsyncStorage.setItem(PUBLIC_KEY_STORAGE_KEY, keyPair.publicKey);
+        
+        // Set in memory
+        setPrivateKey(keyPair.privateKey);
+        setUser(authResponse.user);
+        
+        console.log('Generated new keypair for existing account');
+        return;
       }
       
       // Decrypt private key with password
