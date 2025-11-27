@@ -54,7 +54,8 @@ export function ChatScreen() {
     try {
       const encryptedMessages = await messagesService.getMessages(conversationId);
       const decrypted = await decryptMessages(encryptedMessages);
-      setMessages(decrypted);
+      // Reverse messages for inverted FlatList (newest at bottom)
+      setMessages(decrypted.reverse());
       setLoading(false);
     } catch (error: any) {
       console.error('Failed to load messages:', error);
@@ -76,10 +77,16 @@ export function ChatScreen() {
 
     for (const msg of encryptedMessages) {
       try {
-        // Decrypt the session key using recipient's private key
+        // Determine which public key to use for decryption
+        // If this is my message, I encrypted it with recipient's public key
+        // If this is their message, they encrypted it with my public key
+        const isMyMessage = msg.sender.id === user?.id;
+        const otherPartyPublicKey = isMyMessage ? recipientPublicKey : msg.sender.publicKey;
+        
+        // Decrypt the session key
         const sessionKey = decryptSessionKey(
           msg.encryptedSessionKey,
-          msg.sender.publicKey,
+          otherPartyPublicKey,
           privateKey
         );
 
@@ -155,18 +162,18 @@ export function ChatScreen() {
       }
 
       setMessages((prev) => [
-        ...prev,
         {
           ...sentMessage,
           plaintext: plaintext as string,
         },
+        ...prev,
       ]);
 
       setMessageText('');
       
-      // Scroll to bottom
+      // Scroll to top (which is bottom in inverted list)
       setTimeout(() => {
-        flatListRef.current?.scrollToEnd({ animated: true });
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
       }, 100);
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Failed to send message');
@@ -288,8 +295,8 @@ export function ChatScreen() {
         keyExtractor={(item) => item._id}
         renderItem={renderMessage}
         contentContainerStyle={styles.messagesList}
-        inverted={false}
-        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: false })}
+        inverted={true}
+        onContentSizeChange={() => {}}
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Text style={styles.emptyStateIcon}>💬</Text>
