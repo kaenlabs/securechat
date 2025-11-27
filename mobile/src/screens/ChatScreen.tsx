@@ -18,11 +18,13 @@ import { messagesService } from '../services/messages.service';
 import { Message, DecryptedMessage } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import * as tweetnacl from 'tweetnacl';
+import * as util from 'tweetnacl-util';
 import {
   encryptWithSessionKey,
   decryptWithSessionKey,
   encryptSessionKey,
   decryptSessionKey,
+  generateSessionKey,
 } from '../crypto/encryption';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Chat'>;
@@ -117,8 +119,7 @@ export function ChatScreen() {
     setSending(true);
     try {
       // Generate a random session key and encrypt the message
-      const sessionKey = tweetnacl.randomBytes(32);
-      const sessionKeyBase64 = Buffer.from(sessionKey).toString('base64');
+      const sessionKeyBase64 = generateSessionKey();
       const ciphertext = encryptWithSessionKey(messageText.trim(), sessionKeyBase64);
 
       // Encrypt the session key with recipient's public key
