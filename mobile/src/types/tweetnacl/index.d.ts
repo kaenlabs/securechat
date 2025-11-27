@@ -1,0 +1,1 @@
+declare module 'tweetnacl' { export const box: any; export const secretbox: any; export const hash: any; export const randomBytes: (n: number) => Uint8Array; } declare module 'tweetnacl-util' { export function encodeBase64(arr: Uint8Array): string; export function decodeBase64(str: string): Uint8Array; }
