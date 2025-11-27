@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, IsUUID, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsMongoId, MinLength, MaxLength } from 'class-validator';
 import { ConversationType } from '../../../models/conversation.model';
 
 export class CreateConversationDto {
@@ -9,7 +9,7 @@ export class CreateConversationDto {
    * For direct conversations: the other user's ID
    */
   @IsOptional()
-  @IsUUID()
+  @IsMongoId()
   otherUserId?: string;
 
   /**
@@ -25,6 +25,6 @@ export class CreateConversationDto {
    * For group conversations: array of member user IDs
    */
   @IsOptional()
-  @IsUUID('4', { each: true })
+  @IsMongoId({ each: true })
   memberIds?: string[];
 }
