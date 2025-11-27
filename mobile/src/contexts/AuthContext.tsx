@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { User } from '../types';
 import { authService } from '../services/auth.service';
 import { generateKeyPair, encryptPrivateKey, decryptPrivateKey } from '../crypto/encryption';
 
-const PRIVATE_KEY_STORAGE_KEY = 'encrypted_private_key';
-const PUBLIC_KEY_STORAGE_KEY = 'public_key';
+const PRIVATE_KEY_STORAGE_KEY = '@securechat:encrypted_private_key';
+const PUBLIC_KEY_STORAGE_KEY = '@securechat:public_key';
 
 interface AuthContextType {
   user: User | null;
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(currentUser);
       
       // Try to load stored keys
-      const storedPublicKey = await SecureStore.getItemAsync(PUBLIC_KEY_STORAGE_KEY);
+      const storedPublicKey = await AsyncStorage.getItem(PUBLIC_KEY_STORAGE_KEY);
       if (storedPublicKey) {
         // Keys exist but privateKey needs password to decrypt
         // Will be decrypted on login
@@ -58,13 +58,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Register with backend (send public key)
       const authResponse = await authService.register(username, password, keyPair.publicKey);
       
-      // Store encrypted private key in secure storage
-      await SecureStore.setItemAsync(PRIVATE_KEY_STORAGE_KEY, encryptedPrivateKey, {
-        requireAuthentication: false,
-      });
-      await SecureStore.setItemAsync(PUBLIC_KEY_STORAGE_KEY, keyPair.publicKey, {
-        requireAuthentication: false,
-      });
+      // Store encrypted private key in storage
+      await AsyncStorage.setItem(PRIVATE_KEY_STORAGE_KEY, encryptedPrivateKey);
+      await AsyncStorage.setItem(PUBLIC_KEY_STORAGE_KEY, keyPair.publicKey);
       
       // Keep private key in memory
       setPrivateKey(keyPair.privateKey);
@@ -82,8 +78,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Login with backend
       const authResponse = await authService.login(username, password);
       
-      // Load encrypted private key from secure storage
-      const encryptedPrivateKey = await SecureStore.getItemAsync(PRIVATE_KEY_STORAGE_KEY);
+      // Load encrypted private key from storage
+      const encryptedPrivateKey = await AsyncStorage.getItem(PRIVATE_KEY_STORAGE_KEY);
       
       if (!encryptedPrivateKey) {
         throw new Error('Private key not found. Please register again.');
@@ -114,8 +110,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setPrivateKey(null);
       
       // Optionally clear stored keys (or keep for next login)
-      // await SecureStore.deleteItemAsync(PRIVATE_KEY_STORAGE_KEY);
-      // await SecureStore.deleteItemAsync(PUBLIC_KEY_STORAGE_KEY);
+      // await AsyncStorage.removeItem(PRIVATE_KEY_STORAGE_KEY);
+      // await AsyncStorage.removeItem(PUBLIC_KEY_STORAGE_KEY);
     } finally {
       setIsLoading(false);
     }
