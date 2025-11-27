@@ -3,7 +3,7 @@ import { User } from '../types';
 
 export const usersService = {
   async search(query: string): Promise<User[]> {
-    const response = await apiClient.get(`/users/search?q=${encodeURIComponent(query)}`);
+    const response = await apiClient.get(`/users/search?query=${encodeURIComponent(query)}`);
     return response.data;
   },
 

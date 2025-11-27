@@ -9,13 +9,13 @@ export const conversationsService = {
 
   async createConversation(
     type: 'direct' | 'group',
-    recipientId?: string,
+    otherUserId?: string,
     participantIds?: string[],
     groupName?: string
   ): Promise<Conversation> {
     const response = await apiClient.post('/conversations', {
       type,
-      recipientId,
+      otherUserId,
       participantIds,
       groupName,
     });

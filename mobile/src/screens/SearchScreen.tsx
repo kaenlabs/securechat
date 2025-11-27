@@ -82,9 +82,7 @@ export function SearchScreen() {
       </View>
       <View style={styles.userInfo}>
         <Text style={styles.username}>{item.username}</Text>
-        <Text style={styles.publicKeyHint}>
-          🔑 {item.publicKey.substring(0, 8)}...
-        </Text>
+        <Text style={styles.userStatus}>Tap to start chatting</Text>
       </View>
       {creating === item.id ? (
         <ActivityIndicator size="small" color="#007AFF" />
@@ -160,7 +158,7 @@ export function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#0A0E27',
   },
   header: {
     flexDirection: 'row',
@@ -169,22 +167,21 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 20,
     paddingHorizontal: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    backgroundColor: '#0F1629',
   },
   backButton: {
     padding: 5,
   },
   backButtonText: {
     fontSize: 16,
-    color: '#007AFF',
-    fontWeight: '500',
+    color: '#00D9FF',
+    fontWeight: '600',
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#FFFFFF',
+    letterSpacing: 0.5,
   },
   placeholder: {
     width: 50,
@@ -192,31 +189,35 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     padding: 15,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    backgroundColor: '#0F1629',
   },
   searchInput: {
     flex: 1,
-    height: 45,
-    borderWidth: 1,
-    borderColor: '#DDD',
-    borderRadius: 10,
-    paddingHorizontal: 15,
+    height: 50,
+    borderWidth: 2,
+    borderColor: '#1E2A4A',
+    borderRadius: 15,
+    paddingHorizontal: 20,
     fontSize: 16,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#151B33',
+    color: '#FFFFFF',
     marginRight: 10,
   },
   searchButton: {
-    width: 45,
-    height: 45,
-    backgroundColor: '#007AFF',
-    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)',
+    borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#667EEA',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   searchButtonText: {
-    fontSize: 20,
+    fontSize: 22,
   },
   listContent: {
     padding: 15,
@@ -224,29 +225,33 @@ const styles = StyleSheet.create({
   userItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
-    shadowColor: '#000',
+    backgroundColor: '#151B33',
+    padding: 18,
+    borderRadius: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#1E2A4A',
+    shadowColor: '#00D9FF',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
   avatarContainer: {
     marginRight: 15,
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#007AFF',
+    width: 55,
+    height: 55,
+    borderRadius: 27.5,
+    backgroundColor: 'linear-gradient(135deg, #667EEA 0%, #764BA2 100%)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#00D9FF',
   },
   avatarText: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF',
   },
@@ -254,23 +259,25 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   username: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    marginBottom: 5,
+    letterSpacing: 0.3,
   },
-  publicKeyHint: {
-    fontSize: 12,
-    color: '#999',
+  userStatus: {
+    fontSize: 13,
+    color: '#8B93B0',
   },
   startChatButton: {
     fontSize: 14,
-    color: '#007AFF',
-    fontWeight: '600',
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    backgroundColor: '#E3F2FF',
-    borderRadius: 8,
+    color: '#FFFFFF',
+    fontWeight: '700',
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    backgroundColor: '#00D9FF',
+    borderRadius: 12,
+    overflow: 'hidden',
   },
   emptyState: {
     flex: 1,
@@ -279,19 +286,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
   },
   emptyStateIcon: {
-    fontSize: 60,
+    fontSize: 70,
     marginBottom: 20,
+    opacity: 0.6,
   },
   emptyStateText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#666',
+    fontSize: 19,
+    fontWeight: '700',
+    color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
+    letterSpacing: 0.3,
   },
   emptyStateHint: {
-    fontSize: 14,
-    color: '#999',
+    fontSize: 15,
+    color: '#8B93B0',
     textAlign: 'center',
   },
 });
