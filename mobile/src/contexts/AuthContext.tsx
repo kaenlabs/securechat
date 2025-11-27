@@ -59,8 +59,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const authResponse = await authService.register(username, password, keyPair.publicKey);
       
       // Store encrypted private key in secure storage
-      await SecureStore.setItemAsync(PRIVATE_KEY_STORAGE_KEY, encryptedPrivateKey);
-      await SecureStore.setItemAsync(PUBLIC_KEY_STORAGE_KEY, keyPair.publicKey);
+      await SecureStore.setItemAsync(PRIVATE_KEY_STORAGE_KEY, encryptedPrivateKey, {
+        requireAuthentication: false,
+      });
+      await SecureStore.setItemAsync(PUBLIC_KEY_STORAGE_KEY, keyPair.publicKey, {
+        requireAuthentication: false,
+      });
       
       // Keep private key in memory
       setPrivateKey(keyPair.privateKey);

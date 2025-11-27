@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: 'http://localhost:3000',
+  BASE_URL: 'http://192.168.1.10:3000', // Local IP for Android phone testing
   TIMEOUT: 10000,
 };
 
