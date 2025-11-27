@@ -60,7 +60,9 @@ export class ConversationsService {
           { userA: user1, userB: user2 },
           { userA: user2, userB: user1 },
         ],
-      });
+      })
+        .populate('userA', 'username publicKey')
+        .populate('userB', 'username publicKey');
 
       if (existing) {
         return existing;
@@ -72,6 +74,10 @@ export class ConversationsService {
         userA: user1,
         userB: user2,
       });
+
+      // Populate user details before returning
+      await conversation.populate('userA', 'username publicKey');
+      await conversation.populate('userB', 'username publicKey');
 
       return conversation;
     } else {
